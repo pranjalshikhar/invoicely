@@ -8,6 +8,8 @@ import Card from "react-bootstrap/Card";
 import InvoiceItem from "./InvoiceItem";
 import InvoiceModal from "./InvoiceModal";
 import InputGroup from "react-bootstrap/InputGroup";
+import { addItem, editItem, viewItem, deleteItem } from "../reducers/actions";
+import { connect } from "react-redux";
 
 class InvoiceForm extends React.Component {
   constructor(props) {
@@ -28,9 +30,9 @@ class InvoiceForm extends React.Component {
       total: "0.00",
       subTotal: "0.00",
       taxRate: "",
-      taxAmmount: "0.00",
+      taxAmount: "0.00",
       discountRate: "",
-      discountAmmount: "0.00",
+      discountAmount: "0.00",
     };
     this.state.items = [
       {
@@ -50,6 +52,7 @@ class InvoiceForm extends React.Component {
     var index = this.state.items.indexOf(items);
     this.state.items.splice(index, 1);
     this.setState(this.state.items);
+    this.props.deleteItem(this.state.items);
   }
   handleAddEvent(evt) {
     var id = (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
@@ -62,6 +65,7 @@ class InvoiceForm extends React.Component {
     };
     this.state.items.push(items);
     this.setState(this.state.items);
+    this.props.addItem(this.state.items);
   }
   handleCalculateTotal() {
     var items = this.state.items;
@@ -80,14 +84,14 @@ class InvoiceForm extends React.Component {
       () => {
         this.setState(
           {
-            taxAmmount: parseFloat(
+            taxAmount: parseFloat(
               parseFloat(subTotal) * (this.state.taxRate / 100)
             ).toFixed(2),
           },
           () => {
             this.setState(
               {
-                discountAmmount: parseFloat(
+                discountAmount: parseFloat(
                   parseFloat(subTotal) * (this.state.discountRate / 100)
                 ).toFixed(2),
               },
@@ -95,8 +99,8 @@ class InvoiceForm extends React.Component {
                 this.setState({
                   total:
                     subTotal -
-                    this.state.discountAmmount +
-                    parseFloat(this.state.taxAmmount),
+                    this.state.discountAmount +
+                    parseFloat(this.state.taxAmount),
                 });
               }
             );
@@ -145,9 +149,9 @@ class InvoiceForm extends React.Component {
           <Col md={8} lg={9}>
             <Card className="p-4 p-xl-5 my-3 my-xl-4">
               <div className="d-flex flex-row align-items-start justify-content-between mb-3">
-                <div class="d-flex flex-column">
+                <div className="d-flex flex-column">
                   <div className="d-flex flex-column">
-                    <div class="mb-2">
+                    <div className="mb-2">
                       <span className="fw-bold">Current&nbsp;Date:&nbsp;</span>
                       <span className="current-date">
                         {new Date().toLocaleDateString()}
@@ -279,7 +283,7 @@ class InvoiceForm extends React.Component {
                         ({this.state.discountRate || 0}%)
                       </span>
                       {this.state.currency}
-                      {this.state.discountAmmount || 0}
+                      {this.state.discountAmount || 0}
                     </span>
                   </div>
                   <div className="d-flex flex-row align-items-start justify-content-between mt-2">
@@ -289,7 +293,7 @@ class InvoiceForm extends React.Component {
                         ({this.state.taxRate || 0}%)
                       </span>
                       {this.state.currency}
-                      {this.state.taxAmmount || 0}
+                      {this.state.taxAmount || 0}
                     </span>
                   </div>
                   <hr />
@@ -332,8 +336,8 @@ class InvoiceForm extends React.Component {
                 items={this.state.items}
                 currency={this.state.currency}
                 subTotal={this.state.subTotal}
-                taxAmmount={this.state.taxAmmount}
-                discountAmmount={this.state.discountAmmount}
+                taxAmount={this.state.taxAmount}
+                discountAmount={this.state.discountAmount}
                 total={this.state.total}
               />
               <Form.Group className="mb-3">
@@ -402,4 +406,32 @@ class InvoiceForm extends React.Component {
   }
 }
 
-export default InvoiceForm;
+const mapStateToProps = (state) => {
+  const addInvoiceItem = state.addItem;
+  // const editInvoiceItem = state.editItem;
+  // const viewInvoiceItem = state.viewItem;
+  const deleteInvoiceItem = state.deleteItem;
+  console.log("addInvoiceItem", addInvoiceItem);
+  console.log("deleteInvoiceItem", deleteInvoiceItem);
+  return {
+    addInvoiceItem,
+    // editInvoiceItem,
+    // viewInvoiceItem,
+    deleteInvoiceItem,
+  };
+};
+
+const mapDispatchToProps = {
+  addItem,
+  // editItem,
+  // viewItem,
+  deleteItem,
+};
+
+const mergeProps = (stateProps, dispatchProps, ownProps) =>
+  Object.assign({}, stateProps, dispatchProps, ownProps);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+  mergeProps
+)(InvoiceForm);
