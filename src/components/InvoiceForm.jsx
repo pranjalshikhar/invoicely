@@ -52,7 +52,8 @@ class InvoiceForm extends React.Component {
     var index = this.state.items.indexOf(items);
     this.state.items.splice(index, 1);
     this.setState(this.state.items);
-    this.props.deleteItem(this.state.items);
+    this.props.addItem(this.state.items);
+    this.props.deleteItem(items);
   }
   handleAddEvent(evt) {
     var id = (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
@@ -140,6 +141,7 @@ class InvoiceForm extends React.Component {
     event.preventDefault();
     this.handleCalculateTotal();
     this.setState({ isOpen: true });
+    this.props.editItem(this._reactInternals.memoizedState);
   };
   closeModal = (event) => this.setState({ isOpen: false });
   render() {
@@ -408,24 +410,24 @@ class InvoiceForm extends React.Component {
 
 const mapStateToProps = (state) => {
   const addInvoiceItem = state.addItem;
-  // const editInvoiceItem = state.editItem;
-  // const viewInvoiceItem = state.viewItem;
   const deleteInvoiceItem = state.deleteItem;
+  const editInvoiceItem = state.editItem;
+  console.group("Invoice Items");
   console.log("addInvoiceItem", addInvoiceItem);
   console.log("deleteInvoiceItem", deleteInvoiceItem);
+  console.log("editInvoiceItem", editInvoiceItem);
+  console.groupEnd();
   return {
     addInvoiceItem,
-    // editInvoiceItem,
-    // viewInvoiceItem,
     deleteInvoiceItem,
+    editInvoiceItem,
   };
 };
 
 const mapDispatchToProps = {
   addItem,
-  // editItem,
-  // viewItem,
   deleteItem,
+  editItem,
 };
 
 const mergeProps = (stateProps, dispatchProps, ownProps) =>

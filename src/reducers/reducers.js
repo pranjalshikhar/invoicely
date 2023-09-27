@@ -1,4 +1,3 @@
-import { combineReducers } from "redux";
 import { ADD_ITEM, DELETE_ITEM, EDIT_ITEM, VIEW_ITEM } from "./actions";
 
 const initialState = {
@@ -35,5 +34,4 @@ const invoiceReducer = (state = initialState, action) => {
   }
 };
 
-// const rootReducer = combineReducers({ invoiceReducer });
 export default invoiceReducer;
