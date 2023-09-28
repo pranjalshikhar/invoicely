@@ -6,6 +6,13 @@ An Invoice creator project built with React. Add itemized items, configure quant
 ### Live Demo
 https://invoicelly.netlify.app/
 
+# Installation and Setup
+🎯 ```git clone https://github.com/pranjalshikhar/invoicely```
+<br />
+🎯 ```npm install```
+<br />
+🎯 ```npm run dev```
+
 ### Screenshots
 <img src="https://i.imgur.com/wRetnxk.png" style="max-width: 100px; width: 100%; height: auto;">
 <img src="https://i.imgur.com/AZChaei.png" style="max-width: 100px; width: 100%; height: auto;">
